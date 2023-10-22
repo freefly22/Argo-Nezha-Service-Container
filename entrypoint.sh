@@ -15,7 +15,12 @@ hint() { echo -e "\033[33m\033[01m$*\033[0m"; }   # 黄色
 echo -e "nameserver 127.0.0.11\nnameserver 8.8.4.4\nnameserver 223.5.5.5\nnameserver 2001:4860:4860::8844\nnameserver 2400:3200::1\n" > /etc/resolv.conf
 
 # 根据参数生成哪吒服务端配置文件
-[ ! -d data ] && mkdir data
+if [ ! -d /dashboard/data ]; then
+    mkdir /dashboard/data
+fi
+
+# 增加/dashboard/data/config.yaml配置文件的判断
+if [ ! -f /dashboard/data/config.yaml ]; then
 cat > /dashboard/data/config.yaml << EOF
 debug: false
 site:
@@ -40,6 +45,7 @@ cover: 0
 ignoredipnotification: ""
 ignoredipnotificationserverids: {}
 EOF
+fi
 
 # SSH path 与 GH_CLIENTSECRET 一样
 echo root:"$GH_CLIENTSECRET" | chpasswd root
